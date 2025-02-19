@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecteurs YouTube Dynamiques</title>
+    <link rel="icon" href="./help.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 50px 0 20px;
+            color: #333;
+        }
+
+        .content-container {
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        iframe {
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .commentary {
+            font-size: 1.2em;
+            color: #333;
+            text-align: center;
+            margin: 10px auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 560px;
+        }
+        .analysis {
+        font-size: 1.4em;
+        color: #222;
+        text-align: justify;
+        margin: 30px auto;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        width: 80%;
+        max-width: 800px;
+        line-height: 1.6;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <h1>Mes commentaires extrait par extrait !</h1>
+        <div id="players-container"></div>
+    </div>
+
+    <script defer>
+        // Liste des segments vidéo et commentaires
+        const segments = [
+            [[2, 18], "Extrait 0 : La moustache et le ton apportent une touche d'humour immédiate ! Ton jeu est sombre, presque minimaliste, à l'exception des mimiques, ce qui le rend d'autant plus percutant."],
+            [[19, 46], "Extrait 1 : On se demande vraiment quelle sera la suite ! La cravate exagérément défaite suggère un ton humoristique, tandis que la musique laisse entendre que tout ne fait que commencer."],
+            [[47, 65], "Extrait 2 : J'aime beaucoup ! La colère monte progressivement, mais le ton reste maîtrisé. Ça me rappelle un peu Palmade il y a 20-30 ans, avec un jeu moins surjoué."],
+            [[66, 94], "Extrait 3 : Probablement la suite de l'extrait 1 ! Ça demande un peu de réflexion... À ce moment-là, je me dis qu'en tant que comédien, tu sembles plus à l'aise dans des rôles humoristiques."],
+            [[95, 109], "Extrait 4 : La suite de l'extrait 0, qui conserve la même efficacité !"],
+            [[109, 137], "Extrait 5 : La suite de l'extrait 2 ! La tension continue de monter..."],
+            [[138, 153], "Extrait 6 : Un extrait intéressant, car il montre que tu maîtrises aussi le jeu en mime pour une publicité ! L'humour est toujours présent."],
+            [[154, 163], "Extrait 7 : La continuité des extraits 1 et 5"]
+        ];
+
+        // Charger l'API YouTube
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+
+        const players = []; // Stockage des instances des lecteurs
+
+        // Créer les lecteurs YouTube dynamiquement
+        function onYouTubeIframeAPIReady() {
+            const container = document.getElementById('players-container');
+            const videoId = 'NsMCS0Vl2ZU'; // ID de la vidéo YouTube
+
+            segments.forEach((segment, index) => {
+                const [start, end] = segment[0];
+                const comment = segment[1];
+
+                // Conteneur unique pour chaque lecteur
+                const playerContainer = document.createElement('div');
+                playerContainer.id = `player${index}-container`;
+
+                // Lecteur YouTube
+                const playerDiv = document.createElement('div');
+                playerDiv.id = `player${index}`;
+                playerDiv.setAttribute('aria-label', `Lecteur vidéo pour ${comment}`);
+                playerContainer.appendChild(playerDiv);
+
+                // Commentaire sous le lecteur
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'commentary';
+                commentDiv.textContent = comment;
+                playerContainer.appendChild(commentDiv);
+
+                container.appendChild(playerContainer);
+
+                // Initialiser le lecteur YouTube
+                const player = new YT.Player(playerDiv.id, {
+                    height: '315',
+                    width: '560',
+                    videoId: videoId,
+                    playerVars: {
+                        autoplay: 0,
+                        controls: 1,
+                        start: start,
+                        end: end,
+                        rel: 0,
+                    }
+                });
+
+                players.push(player);
+            });
+        }
+    </script>
+
+<div class="analysis">
+    <p>
+        Les situations des extraits 1 et 3 sont plus difficiles à cerner...
+        <br><br>
+        Difficile de commenter les performances d'un maître ! 😊
+        <br><br>
+        En voyant la vidéo, on se dit que tu es vraiment à l'aise dans des rôles humoristiques.
+        Personnellement, j'aurais aimé voir une séquence avec une variation d’émotions, par exemple un passage de la colère à la joie.
+        <br><br>
+        Le look moustachu apporte une vraie transformation visuelle.
+        La pub "Orange" est également intéressante, car elle met en avant la diversité de ton jeu.
+        <br><br>
+        Difficile d’en dire plus. Est-ce que tu vises un type de rôle en particulier ?
+    </p>
+</div>
+
+<div class="analysis">
+    <p>
+        Je viens de réaliser que la vidéo YouTube sur laquelle je me suis basé n’est pas la même que celle sur Facebook !
+        <br><br>
+        Sur Facebook, de 1:36 à 1:52 et de 2:54 à 3:20 :  
+        <strong>Tu portes la barbe !</strong>  
+        Ces séquences sont importantes, car elles enrichissent ta palette de jeu. Ton personnage a une apparence différente et exprime des émotions plus sombres, tristes voire tragiques.
+        <br><br>
+        Elles s'enchaînent bien, mais on a du mal à situer ce qu'elles racontent précisément.
+        <br><br>
+        Désolé, je viens seulement de me rendre compte que les vidéos YouTube et Facebook n'étaient pas les mêmes ! 😅
+        <br><br>
+        Il y a une belle diversité dans ton jeu.
+        Les situations des extraits 1 et 3 semblent liées, mais narrativement, elles restent un peu floues.
+    </p>
+</div>
+
+    
+    
+    
+</body>
+</html>
